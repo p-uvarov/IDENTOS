@@ -19,6 +19,7 @@
 var x; //function's argument
 var fnX; // Value of the function
 var arrayOfArguments = []; //Array of arguments that must be checked to find F(x) value
+var reg = new RegExp('^-?[0-9]+$'); //Create a regular expresion where value of x can only contain numbers 0-9 and sign;
 
 //MAIN TASK
 
@@ -29,33 +30,43 @@ document.querySelector(".btn-find").addEventListener("click", calcFnX)
 //Function output the value of F(x) for given the given input integer x
 function calcFnX() {
     fnX = 0; //Reset F(x)
-    x = parseInt(document.getElementById("inputX").value);
+    x = document.getElementById("inputX").value;
 
-    if (x > 0 && x < 100001) {
-        arrayOfArguments.push(x); //Set x as a first argument of array
-        console.log(x);
-    
-        //Loop until elements exist in the array
-        while (arrayOfArguments[0]) {
-            checkArgument(arrayOfArguments);  
-        }
-        
-        document.getElementById("functionValue").setAttribute("class", "functionValue");
-        document.getElementById("functionValue").textContent = "F(x) = " + fnX;
-        console.log("F(x) = " + fnX); //Print result F(x) to the console
-    }
-    else {
+    if (!reg.test(x)) { //Check if x isn't an integer value
         document.getElementById("functionValue").setAttribute("class", "functionValueError");
-        document.getElementById("functionValue").innerHTML = "Error! <br> x must be > 0 and < 100001";
+        document.getElementById("functionValue").innerHTML = "Error! <br> x must be integer";
         console.log("Error! X must be > 0 and < 100001."); //Print error to the console
     }
+    else {
+        x = parseInt(x);
+
+        if (x > 0 && x < 100001) {
+            arrayOfArguments.push(x); //Set x as a first argument of array
+            console.log(x);
+        
+            //Loop until elements exist in the array
+            while (arrayOfArguments[0]) {
+                checkArgument(arrayOfArguments);  
+            }
+            
+            document.getElementById("functionValue").setAttribute("class", "functionValue");
+            document.getElementById("functionValue").textContent = "F(x) = " + fnX;
+            console.log("F(x) = " + fnX); //Print result F(x) to the console
+        }
+        else {
+            document.getElementById("functionValue").setAttribute("class", "functionValueError");
+            document.getElementById("functionValue").innerHTML = "Error! <br> x must be > 0 and < 100001";
+            console.log("Error! X must be > 0 and < 100001."); //Print error to the console
+        }
+    }
+
 }
 
 //Function that check first argument of array for meeting function's properties #1-5
 function checkArgument(arrayOfArg) {
     var arg = arrayOfArg[0];
     
-    //Check function property #1: F(x)=0 at x=0
+    //Check function property #1: F(x)=0 at x=0. Property #1 x = 0 conflicts with conditions under Property #5 x > 0.
     if (arg === 0) {
         fnX += 0; //Update f(X) value
         arrayOfArg.shift(); //Delete first element that was checked from the array of arguments that must be checked.
@@ -87,7 +98,7 @@ function checkArgument(arrayOfArg) {
         //Fill array with all possible a and b values meeting the condition a * b = x, where a and are two positive integers 
         for (var b = 1; b <= arg; b++) {
             var a = arg / b; // a = x / b
-            //Check if 'a' is an integer value
+            //Check if 'a' has an integer value
             if (a % 1 === 0) {
                 var abObject = new ab(a, b);
                 abArr.push(abObject);
