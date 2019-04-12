@@ -29,10 +29,11 @@ document.querySelector(".btn-find").addEventListener("click", calcFnX)
 //Function output the value of F(x) for given the given input integer x
 function calcFnX() {
     fnX = 0; //Reset F(x)
-    x = document.getElementById("inputX").value;
+    x = parseInt(document.getElementById("inputX").value);
 
     if (x > 0 && x < 100001) {
         arrayOfArguments.push(x); //Set x as a first argument of array
+        console.log(x);
     
         //Loop until elements exist in the array
         while (arrayOfArguments[0]) {
